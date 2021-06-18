@@ -13,7 +13,7 @@ pandas==1.1.5
 ## Installation
 
 1. Clone repo
-2. Add path to go.obo file in go_config.sh
+2. Add path to `go.obo` file in `go_config.sh`
 3. Run `bash go_config.sh`
 
 ## Run
@@ -25,4 +25,9 @@ The folders `input` and `nextflow_config` currently contain example data. Refer 
 3. Replace the input files in `nextflow_config/vHRR_single.config` or `nextflow_config/vHRR_multiple.config` with your filenames and adapt the nextflow parameters to  fit your needs and system.
 4. For a single atlas: run `bash vHRR_single.sh`. For multiple atlases: run `bash vHRR_multiple.sh`. 
 
+## Citation
+
+If you publish results generated using vHRR, please cite:
+
+Depuydt, T., & Vandepoele, K. (2021). Multi-omics network-based functional annotation of unknown Arabidopsis genes. BioRxiv, 2021.06.17.448819. https://doi.org/10.1101/2021.06.17.448819
 
