@@ -51,7 +51,7 @@ def addIC(go_gene, go_ic, out_file):
 if __name__ == '__main__':
 
 
-    scripts_dir = os.path.abspath(argv[0])
+    scripts_dir = os.path.dirname(os.path.abspath(argv[0]))
     go_file = argv[1]
     go_gene_ic = argv[2]
 
