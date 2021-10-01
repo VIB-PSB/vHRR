@@ -7,10 +7,10 @@ from backend import get_obo
 def extend_annotations(go_file, out_file, go_obo):
 
     # extend predictions
-    os.system("scripts/extend_go.py {} {} > tmp/intermediate_go_file1.tmp".format(go_file, go_obo))
+    os.system("{}/extend_go.py {} {} > tmp/intermediate_go_file1.tmp".format(scripts_dir, go_file, go_obo))
 
     # filter BP terms
-    os.system("scripts/filter_go_category.py tmp/intermediate_go_file1.tmp biological_process {} > tmp/intermediate_go_file2.tmp".format(go_obo))
+    os.system("{}/filter_go_category.py tmp/intermediate_go_file1.tmp biological_process {} > tmp/intermediate_go_file2.tmp".format(scripts_dir, go_obo))
 
     # drop 'biological_process'
     os.system("grep -v 'GO:0008150' tmp/intermediate_go_file2.tmp > tmp/intermediate_go_file3.tmp")
@@ -23,7 +23,7 @@ def extend_annotations(go_file, out_file, go_obo):
 
 
 def calculate_IC(go_file, out_file):
-    os.system("scripts/calculate_ICu_per_GO.py {} > {}".format(go_file, out_file))
+    os.system("{}/calculate_ICu_per_GO.py {} > {}".format(scripts_dir, go_file, out_file))
 
 
 def addIC(go_gene, go_ic, out_file):
@@ -51,6 +51,7 @@ def addIC(go_gene, go_ic, out_file):
 if __name__ == '__main__':
 
 
+    scripts_dir = os.path.abspath(argv[0])
     go_file = argv[1]
     go_gene_ic = argv[2]
 
