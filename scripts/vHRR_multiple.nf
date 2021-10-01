@@ -6,10 +6,9 @@
 
 
 // Scripts
-scripts_folder = "${params.wkdir}/scripts"
-script_prepare_starter_pack = "${scripts_folder}/vHRR_prepare.py"
-script_scan_HRR = "${scripts_folder}/vHRR_scan.py"
-script_final_run = "${scripts_folder}/vHRR_collect_multiple.py"
+script_prepare_starter_pack = "${params.scripts}/vHRR_prepare.py"
+script_scan_HRR = "${params.scripts}/vHRR_scan.py"
+script_final_run = "${params.scripts}/vHRR_collect_multiple.py"
 
 
 
