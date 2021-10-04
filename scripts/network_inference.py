@@ -93,6 +93,34 @@ def convert_hrr(network, weights_are_ranks=False, reorder=False, use_MR=False):
         return hrr_network
 
 
+def convert_knn(network, cutoff=100, weights_are_ranks=False):
+    """
+    Converts a fully connected network to KNN. This network is not symmetrical!
+    """
+    BATCH_SIZE = 1000 # To reduce memory usage, only sort for 1000 genes at a time.
+
+    # Copy the original network, set edges between the same gene to max/min depending on high_to_low.
+    # This ensures that the gene's perfect correlation to themselves will not shift the ranks by one
+    # for all the other genes.
+    knn_network = network[:]
+    if weights_are_ranks:
+        knn_network[np.identity(len(knn_network), dtype=np.bool)] = np.max(knn_network)
+    else:
+        knn_network[np.identity(len(knn_network), dtype=np.bool)] = np.min(knn_network)
+
+    # Loop batches
+    for batch_start in range(0, len(network), BATCH_SIZE):
+        batch_size = min(BATCH_SIZE, len(network)-batch_start)
+        batch_ranks = np.argsort(knn_network[batch_start:batch_start+batch_size], axis=1)
+        if not weights_are_ranks: # Reverse the sorting
+            batch_ranks = np.fliplr(batch_ranks)
+        knn_network[batch_start:batch_start+batch_size] = np.argsort(batch_ranks, axis=1) + 1 # +1 to make the lowest rank 1
+
+    cutoff_network(knn_network, threshold=cutoff, weights_are_ranks=True)
+
+    return knn_network
+
+
 
 def cutoff_network(network, threshold=100, weights_are_ranks=True):
     """
