@@ -29,5 +29,4 @@ The folders `input` and `nextflow_config` currently contain example data. Refer 
 
 If you publish results generated using vHRR, please cite:
 
-Depuydt, T., & Vandepoele, K. (2021). Multi-omics network-based functional annotation of unknown Arabidopsis genes. BioRxiv, 2021.06.17.448819. https://doi.org/10.1101/2021.06.17.448819
-
+Depuydt, T. and Vandepoele, K. (2021), Multi-omics network-based functional annotation of unknown Arabidopsis genes. Plant J. Accepted Author Manuscript. https://doi.org/10.1111/tpj.15507
