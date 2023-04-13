@@ -190,7 +190,7 @@ for alpha in [i/10 for i in range(0,11)]:
                                                             ICu_matrix_com[np.newaxis, :, i_feature], 
                                                             [feature], 
                                                             scanning=True, fdr=fdr, use_FC=use_FC, use_Fmax=use_Fmax, 
-                                                            correct_MQSE=correct_MQSE, use_ICu=False, 
+                                                            correct_MQSE=correct_MQSE, use_ICu=use_ICu, 
                                                             extend_after_predicting=extend_predictions_after_Fmax, 
                                                             reduce_final_prediction=reduce_final_prediction)
 
@@ -253,7 +253,7 @@ for alpha in [i/10 for i in range(0,11)]:
                                                                     ICu_matrix_com[np.newaxis, :, i_feature], 
                                                                     [feature], 
                                                                     scanning=True, fdr=fdr, use_FC=use_FC, use_Fmax=use_Fmax, 
-                                                                    correct_MQSE=correct_MQSE, use_ICu=True, 
+                                                                    correct_MQSE=correct_MQSE, use_ICu=use_ICu, 
                                                                     extend_after_predicting=extend_predictions_after_Fmax, 
                                                                     reduce_final_prediction=reduce_final_prediction)
 
