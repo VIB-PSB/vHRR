@@ -52,7 +52,77 @@ def weighted_correlation(compendium, weights):
     network = np.dot(weights * minmeans / np.sum(weights), minmeans.T) / np.dot(variances, variances.T)
     return network
 
+def clr(compendium):
+    
+    """
+    """
+    
+    geo_means = np.tile(stats.mstats.gmean(compendium, axis=1), (compendium.shape[1], 1)).T
+    cent_log_ratio = np.log(compendium/geo_means)
+    
+    return cent_log_ratio
 
+def getVar(array):
+    
+    minmeans = array - np.mean(array, axis=1, keepdims=True)
+    variances = np.sum(np.square(minmeans), axis=1, keepdims=True)/array.shape[1]
+
+    return variances
+
+
+def pairwiseRho(compendium, verbose=True):
+    """
+    Calculates Rho values between all genes in a compendium. Returns
+    a fully connected network
+
+    # Input:
+    compendium = np.array( [ [ float ] ] ) -> genes x samples  expression values
+
+    # output:
+    network = np.array( [ [  float ]  ] )  -> genes x genes    proportionality values
+    """
+    
+    # init network
+    n_genes = compendium.shape[0]
+    n_samples = compendium.shape[1]
+    network = np.zeros((n_genes, n_genes))
+
+    # var(A_j)
+    variances = getVar(compendium)
+    
+    # Covariance
+    minmeans = compendium - np.mean(compendium, axis=1, keepdims=True)
+    covariances = np.dot(minmeans, minmeans.T)/n_samples
+    
+    for i in range(n_genes):
+
+        if verbose:
+            print('{}/{}'.format(i+1, n_genes), end='\r')
+            if i % 100 == 0:
+                sys.stdout.flush()
+
+        # dummy atlas from current row
+        repeated_row = np.tile(compendium[i], (n_genes-i, 1))
+
+        # var(A_i)
+        row_variance = np.tile(variances[i], (n_genes-i, 1))
+        
+        # var(A_i - A_j)
+        diff_variances = row_variance+variances[i:]-2*covariances[i,i:].reshape((n_genes-i, 1))
+
+        # 1-var(A_i - A_j)/(var(A_i) + var(A_j))
+        rho = 1-diff_variances/(row_variance+variances[i:])
+    
+        # substitute current row
+        network[i,i:] = rho.flatten()
+    
+    network[np.equal(network, 0)] = -2
+    network = np.maximum(network, network.T)
+    
+    assert network.min() >= -1
+    assert network.max() <= 1.000001
+    
+    return network
 
 
 #######################
