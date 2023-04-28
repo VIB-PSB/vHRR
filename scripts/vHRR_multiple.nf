@@ -36,13 +36,13 @@ process prepare_starter_pack {
 
     script:
     """
-        mkdir -p ${params.wkdir}/tmp
-        mkdir -p ${params.wkdir}/tmp/${atlas.baseName}
-        mkdir -p ${params.wkdir}/tmp/${atlas.baseName}/enrichments
+        mkdir -p ${params.tmpdir}
+        mkdir -p ${params.tmpdir}/${atlas.baseName}
+        mkdir -p ${params.tmpdir}/${atlas.baseName}/enrichments
 
         OMP_NUM_THREADS=1 python3 ${script_prepare_starter_pack} ${atlas} \
                                                                  ${params.go_gene} \
-                                                                 ${params.wkdir}/tmp/${atlas.baseName}/starter_pack.npz \
+                                                                 ${params.tmpdir}/${atlas.baseName}/starter_pack.npz \
                                                                  > go_terms.li
     """
 }
@@ -74,10 +74,10 @@ process scan_HRR {
     """
         touch .scan_dummy
         OMP_NUM_THREADS=1 python3 ${script_scan_HRR} ${atlas} \
-                                                     ${params.wkdir}/tmp/${atlas.baseName}/starter_pack.npz \
+                                                     ${params.tmpdir}/${atlas.baseName}/starter_pack.npz \
                                                      ${go_term} \
-                                                     -out_folder ${params.wkdir}/tmp/${atlas.baseName}/enrichments \
-                                                     > ${params.wkdir}/tmp/${atlas.baseName}/${go_term}_hrr.tmp
+                                                     -out_folder ${params.tmpdir}/${atlas.baseName}/enrichments \
+                                                     > ${params.tmpdir}/${atlas.baseName}/${go_term}_hrr.tmp
     """
 }
 
@@ -97,11 +97,11 @@ process evaluate_predictions {
 
     script:
     """
-        cat ${params.wkdir}/tmp/*/*_hrr.tmp > ${params.wkdir}/tmp/hrr_sizes.tsv
+        cat ${params.tmpdir}/*/*_hrr.tmp > ${params.tmpdir}/hrr_sizes.tsv
 
         OMP_NUM_THREADS=1 python3 ${script_final_run} ${params.go_gene} \
-                                                      ${params.wkdir}/tmp \
-                                                      -hrr ${params.wkdir}/tmp/hrr_sizes.tsv \
+                                                      ${params.tmpdir} \
+                                                      -hrr ${params.tmpdir}/hrr_sizes.tsv \
                                                       > ${params.out_folder}/predictions_multiple.tsv
     """
 }
